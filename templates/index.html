@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+{% block title %}Транскриптор{% endblock %}
+{% block content %}
+    <!-- Begin page content -->
+      <div class="page-header">
+        <form action="/" method="POST">
+        <div class="form-group">
+            <div class="input-group">
+            <input type="text" name="word" value="" class="form-control input-lg" placeholder="Введіть слово">
+            <span class="input-group-btn">
+              <button class="btn btn-default btn-lg" type="submit">Дай транскрипцію</button>
+            </span>
+            </div>
+        </div>
+        </form>
+      <p class="lead">
+          {% if transcription is defined %}
+          {{ word }} - {{ transcription }}
+          {% elif error is defined %}
+          {{ error }}
+          {% endif %}
+      </p>
+      </div>
+      <div class="page-header">
+      <p>
+          <h4>Останні транскрипції</h4>
+          <ul>
+          {% for word, transcriptions in last_queries %}
+            <li>{{ word }} - {{ transcriptions }}</li>
+          {% endfor %}
+          </ul>
+      </p>
+      </div>
+{% endblock %}
