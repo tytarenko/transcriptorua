@@ -32,11 +32,6 @@ class Chars:
     SIMPLE_CONSONANTS = ('б', 'в', 'г', 'ґ', 'д', 'ж', 'з', 'к', 'л', 'м', 'н', 'п', 'р', 'с', 'т', 'ф', 'х', 'ц', 'ч', 'ш',)
     ALL_CONSONANTS = SIMPLE_CONSONANTS + tuple(COMPLEX_CONSONANTS.keys())
 
-    ASYLLABICS = {
-        'в': 'ў',
-        'й': 'і'
-    }
-
 
 class Phonema:
     DOUBLE_SOFT_CONSONANTS = (
@@ -133,7 +128,6 @@ class PhonemaGenerator:
         self.find_and_remove_accent()
         self.replace_complex_consonants()
         self.replace_complex_vowels()
-        self.replace_asyllabics()
 
         # generate
         self.generate_transcription()
@@ -184,22 +178,6 @@ class PhonemaGenerator:
                 word += replace_char[0]
         # Remove apostrophe
         self.word = word.replace(Chars.APOSTROPHE, '')
-
-    def replace_asyllabics(self):
-        word = self.word
-        for k, v in Chars.ASYLLABICS.items():
-            positions = [pos for pos, char in enumerate(word) if char == k]
-            for pos in positions:
-                last_index = len(self.word) - 1
-                # only for char 'в'
-                if k == 'в' and pos == 0 and word[pos+1] in Chars.ALL_CONSONANTS:
-                    word = '{}{}'.format(v, word[1:])
-                # exclude chars 'і', 'и'
-                elif pos == last_index and word[pos-1] in Chars.SIMPLE_VOWELS and word[pos-1] not in ('і', 'и'):
-                    word = '{}{}'.format(word[:-1], v)
-                elif 0 < pos < last_index and (word[pos-1] in Chars.SIMPLE_VOWELS and word[pos+1] in Chars.ALL_CONSONANTS):
-                    word = '{}{}{}'.format(word[:pos], v, word[pos+1:])
-        self.word = word
 
     def generate_transcription(self):
         # make phonema mask using one char for one phonema
