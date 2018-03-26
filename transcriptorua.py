@@ -33,6 +33,7 @@ class Chars:
     ALL_CONSONANTS = SIMPLE_CONSONANTS + tuple(COMPLEX_CONSONANTS.keys())
 
 
+
 class Phonema:
     DOUBLE_SOFT_CONSONANTS = (
         ('ннь', 'ɲː'),
