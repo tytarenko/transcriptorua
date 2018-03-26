@@ -11,11 +11,15 @@ datafile = '{}/data.json'.format(path)
 app = Flask(__name__)
 
 
+with open(datafile) as fp:
+    data = json.load(fp)
+
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     with open(datafile) as fp:
         data = json.load(fp)
-    d = deque(data, maxlen=5)
+    d = deque(data, maxlen=25)
     params = {'last_queries': list(d)[::-1]}
     if request.method == 'POST':
         word = request.form.get("word")
@@ -26,7 +30,7 @@ def index():
                 params.update({'transcription': transcription, 'word': word})
                 with open(datafile, 'w') as fp:
                     json.dump(list(d), fp)
-            except ValueError as e:
+            except ValueError:
                 params.update({'error': 'Введене слова містить символи які відсутні в українській абетці'})
 
     return render_template('index.html', **params)
